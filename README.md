@@ -1,30 +1,104 @@
-# FamWell UI Design
+# 🌱 FamWell – Family Mental Wellness SaaS Platform
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+## 🧠 What is FamWell?
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/priyansh-bytes-projects/v0-fam-well-ui-design)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/xUTAGtwkPt4)
+**FamWell** is a next-gen mental wellness platform that transforms how families stay emotionally connected. It’s built as a fully-responsive, production-ready **SaaS platform** with an emphasis on design, real-time emotional tracking, AI nudges, privacy, and gamified wellness.
 
-## Overview
+Think of it like Notion + Calm + Duolingo for your family’s mental health — all in one sleek UI.
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+---
 
-## Deployment
+## 💡 Key Features
 
-Your project is live at:
+### ✅ Auth & Onboarding
+- Email/Password Sign Up + Log In
+- Family Code-based Group Onboarding
+- Role-based onboarding (Parent / Child / Grandparent)
 
-**[https://vercel.com/priyansh-bytes-projects/v0-fam-well-ui-design](https://vercel.com/priyansh-bytes-projects/v0-fam-well-ui-design)**
+### 🏠 Landing Page
+- Hero section with tagline, call-to-action, and emotional design
+- Features overview, trust highlights, testimonials
+- Dark + Light Mode Toggle
+- Mobile-first design
 
-## Build your app
+### 📊 Emotional Dashboard
+- Mood tracking widgets (daily/weekly/monthly trends)
+- AI-powered emotion detection (simulated for now)
+- Dynamic Trust Graphs — see how connected your family is
+- Emotion Logs per member
+- Privacy toggles for each entry
 
-Continue building your app on:
+### 🤖 AI Nudges (Hardcoded for now)
+- Simulated emotional suggestions, like:
+  > "It might be a good day for Dad to check in on Meena"
+  > "Grandpa seems more withdrawn this week"
+- Scheduled daily/weekly suggestions
 
-**[https://v0.dev/chat/projects/xUTAGtwkPt4](https://v0.dev/chat/projects/xUTAGtwkPt4)**
+### 📔 Journaling
+- Each member has their own private journal
+- Option to share selected entries with the family
+- AI auto-tagging (e.g. “stress”, “happy”, “social”)
 
-## How It Works
+### 🛠 Admin Settings
+- Create/manage family members
+- Set privacy rules per member
+- Manage nudge frequency and alert sensitivity
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### 🧩 Gamified Wellness
+- Kindness Leaderboard
+- Daily check-in streaks
+- Weekly challenges for empathy and communication
+
+---
+
+## 🎨 UI Stack
+
+- **Framework:** Next.js 14 (via Vercel)
+- **Component Library:** [ShadCN/UI](https://ui.shadcn.com)
+- **Design Tooling:** TailwindCSS · Framer Motion · Lucide Icons
+- **AI Simulation:** Gemini/GPT hardcoded JSON mock responses
+- **Font:** Inter (with system fallback)
+
+---
+
+## 🧪 What's Working Now
+
+- [x] Landing Page
+- [x] Auth Flow (Login / Signup)
+- [x] Role-based user onboarding
+- [x] Dashboard with mock emotion data
+- [x] Journals + Emotion Logs UI
+- [x] AI Nudges UI (hardcoded but working!)
+- [x] Trust Graph (Static + Dynamic)
+- [x] Mobile & desktop responsive
+- [x] Full Dark/Light theme switcher
+- [x] Nav routing + protected pages (simulated)
+
+---
+
+## 🚧 What’s Coming Next
+
+- [ ] Connect to real backend (Supabase/Firebase/Prisma + DB)
+- [ ] Real-time AI nudges via Gemini/OpenAI API
+- [ ] Full role-based access control
+- [ ] Secure journaling encryption
+- [ ] Push/email notifications
+- [ ] Public launch with subscription model
+
+---
+
+## 🚀 Getting Started
+
+1. Clone the repo
+2. `npm install`
+3. Run locally with `npm run dev`
+4. Modify components in `/app` and UI elements in `/components`
+5. Connect to your backend when ready
+
+---
+
+## 🤝 Hackathon-Ready
+
+FamWell is being built for a hackathon, but it’s designed like a real SaaS product from the ground up. Every screen, transition, and feature is aimed at creating an app that’s never been seen before , combining mental health, family connection, and AI-driven personalization in one tool.
+
+---
