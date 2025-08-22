@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +10,10 @@ import { Heart, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
+// Firebase
+import { auth, provider } from "@/lib/firebase"
+import { signInWithPopup } from "firebase/auth"
+
 export function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -18,7 +21,7 @@ export function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate login
+    // Fake login demo
     localStorage.setItem(
       "famwell-user",
       JSON.stringify({
@@ -29,6 +32,27 @@ export function LoginForm() {
       }),
     )
     router.push("/dashboard")
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+
+      localStorage.setItem(
+        "famwell-user",
+        JSON.stringify({
+          name: user.displayName,
+          role: "Parent",
+          avatar: user.photoURL,
+          email: user.email,
+        }),
+      )
+
+      router.push("/dashboard")
+    } catch (error) {
+      console.error("Google sign-in error:", error)
+    }
   }
 
   return (
@@ -82,6 +106,26 @@ export function LoginForm() {
                 Sign In
               </Button>
             </form>
+
+            {/* Divider */}
+            <div className="my-6 flex items-center">
+              <div className="flex-grow h-px bg-gray-300"></div>
+              <span className="px-4 text-sm text-gray-500">or</span>
+              <div className="flex-grow h-px bg-gray-300"></div>
+            </div>
+
+            {/* Google Login */}
+            <Button
+              onClick={handleGoogleSignIn}
+              className="w-full cursor-pointer flex items-center justify-center space-x-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-xl py-3 shadow-sm"
+            >
+              <img
+                src="https://www.svgrepo.com/show/355037/google.svg"
+                alt="Google Logo"
+                className="w-5 h-5"
+              />
+              <span>Sign in with Google</span>
+            </Button>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">

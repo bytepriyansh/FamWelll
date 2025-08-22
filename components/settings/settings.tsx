@@ -26,7 +26,8 @@ import {
   AlertTriangle,
   CheckCircle,
 } from "lucide-react"
-import { DashboardLayout } from "@/components/layout/dashboard-layout"
+import { DashboardLayout } from "../dashboard/dashboard"
+
 
 const familyMembers = [
   { id: "sarah", name: "Sarah", role: "Mom", avatar: "👩‍💼" },

@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,9 +17,15 @@ import {
   X,
   HelpCircle,
   Trophy,
+  LogOut,
+  User,
 } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { getAuth, signOut } from "firebase/auth"
+import { app } from "@/lib/firebase"
+
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -38,6 +43,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const pathname = usePathname()
+  const router = useRouter()
+  const auth = getAuth(app)
 
   useEffect(() => {
     const userData = localStorage.getItem("famwell-user")
@@ -46,12 +53,21 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth)
+      localStorage.removeItem("famwell-user")
+      router.push("/") 
+    } catch (err) {
+      console.error("Logout failed:", err)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
-      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="fixed inset-0 bg-black bg-opacity-25" onClick={() => setSidebarOpen(false)} />
+          <div className="fixed inset-0 bg-black/25" onClick={() => setSidebarOpen(false)} />
           <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
               <div className="flex items-center space-x-2">
@@ -82,13 +98,43 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 ))}
               </ul>
             </nav>
+
+            {/* Mobile user profile */}
+            {user && (
+              <div className="mt-6 border-t pt-4 px-3">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-gray-900 bg-gray-50 hover:bg-gray-100"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="text-2xl">{user.avatar || "👤"}</div>
+                        <div className="flex flex-col text-left">
+                          <span className="font-semibold">{user.name}</span>
+                          <span className="text-xs text-gray-500">{user.role}</span>
+                        </div>
+                      </div>
+                      <User className="w-4 h-4 text-gray-500" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </div>
         </div>
       )}
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white/80 backdrop-blur-sm px-6 pb-4 shadow-lg">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white/80 backdrop-blur-sm px-6 pb-6 shadow-lg rounded-r-2xl">
+          {/* Brand */}
           <div className="flex h-16 shrink-0 items-center">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
@@ -97,6 +143,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               <span className="text-xl font-serif font-bold">FamWell</span>
             </div>
           </div>
+
+          {/* Nav */}
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
@@ -121,15 +169,31 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </ul>
           </nav>
 
-          {/* User profile */}
+          {/* User profile (desktop) */}
           {user && (
-            <div className="flex items-center gap-x-4 px-3 py-3 text-sm font-medium leading-6 text-gray-900 bg-gray-50 rounded-xl">
-              <div className="text-2xl">{user.avatar}</div>
-              <div className="flex-1">
-                <div className="font-semibold">{user.name}</div>
-                <div className="text-xs text-gray-500">{user.role}</div>
-              </div>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-x-3 px-3 py-3 text-sm font-medium leading-6 text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-xl w-full justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="text-2xl">{user.avatar || "👤"}</div>
+                    <div className="flex-1 text-left">
+                      <div className="font-semibold">{user.name}</div>
+                      <div className="text-xs text-gray-500">{user.role}</div>
+                    </div>
+                  </div>
+                  <User className="w-4 h-4 text-gray-500" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       </div>
@@ -156,7 +220,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Page content */}
         <main className="py-6">
           <div className="px-4 sm:px-6 lg:px-8">{children}</div>
         </main>
