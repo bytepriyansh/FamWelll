@@ -146,63 +146,84 @@ export function TrustGraph() {
           {/* Trust Graph Visualization */}
           <div className="lg:col-span-2">
             <Card className="famwell-card h-[600px]">
-              <CardContent className="p-6 h-full">
-                <svg
-                  ref={svgRef}
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 800 500"
-                  className="border rounded-xl bg-gradient-to-br from-purple-50 to-blue-50"
-                >
-                  {/* Connections */}
-                  {graphData.connections.map((connection, index) => {
-                    const fromMember = graphData.members.find((m) => m.id === connection.from)
-                    const toMember = graphData.members.find((m) => m.id === connection.to)
+<CardContent className="p-6 h-full">
+  <svg
+    ref={svgRef}
+    width="100%"
+    height="100%"
+    viewBox="0 0 800 500"
+    className="border rounded-xl bg-gradient-to-br from-purple-50 to-blue-50"
+  >
+    {/* Connections */}
+    {graphData.connections.map((connection, index) => {
+      const fromMember = graphData.members.find((m) => m.id === connection.from)
+      const toMember = graphData.members.find((m) => m.id === connection.to)
 
-                    if (!fromMember || !toMember) return null
+      if (!fromMember || !toMember) return null
 
-                    return (
-                      <line
-                        key={index}
-                        x1={fromMember.x}
-                        y1={fromMember.y}
-                        x2={toMember.x}
-                        y2={toMember.y}
-                        stroke={getConnectionColor(connection.health)}
-                        strokeWidth={getConnectionWidth(connection.strength)}
-                        className="cursor-pointer hover:opacity-80 transition-opacity"
-                        onClick={() => handleConnectionClick(connection)}
-                      />
-                    )
-                  })}
+      return (
+        <line
+          key={index}
+          x1={fromMember.x}
+          y1={fromMember.y}
+          x2={toMember.x}
+          y2={toMember.y}
+          stroke={getConnectionColor(connection.health)}
+          strokeWidth={getConnectionWidth(connection.strength)}
+          className="cursor-pointer hover:opacity-80 transition-opacity"
+          onClick={() => handleConnectionClick(connection)}
+        />
+      )
+    })}
 
-                  {/* Nodes */}
-                  {graphData.members.map((member) => (
-                    <g key={member.id}>
-                      <circle
-                        cx={member.x}
-                        cy={member.y}
-                        r="32"
-                        className={`${member.color} cursor-pointer hover:scale-110 transition-transform ${
-                          selectedNode === member.id ? "ring-4 ring-purple-500" : ""
-                        }`}
-                        onClick={() => handleNodeClick(member.id)}
-                      />
-                      <text x={member.x} y={member.y + 5} textAnchor="middle" className="text-2xl pointer-events-none">
-                        {member.avatar}
-                      </text>
-                      <text
-                        x={member.x}
-                        y={member.y + 55}
-                        textAnchor="middle"
-                        className="text-sm font-medium fill-gray-700 pointer-events-none"
-                      >
-                        {member.name}
-                      </text>
-                    </g>
-                  ))}
-                </svg>
-              </CardContent>
+    {/* Nodes */}
+    {graphData.members.map((member) => (
+      <g key={member.id} onClick={() => handleNodeClick(member.id)} className="cursor-pointer">
+        {/* Selection ring */}
+        <circle
+          cx={member.x}
+          cy={member.y}
+          r={selectedNode === member.id ? 40 : 0}
+          fill="none"
+          stroke="#a855f7" // purple-500
+          strokeWidth="4"
+          className="transition-all duration-300"
+        />
+
+        {/* Main circle */}
+        <circle
+          cx={member.x}
+          cy={member.y}
+          r="32"
+          fill="white"
+          stroke="currentColor"
+          className={`${member.color} transition-colors duration-300 hover:drop-shadow-lg`}
+        />
+
+        {/* Avatar */}
+        <text
+          x={member.x}
+          y={member.y + 5}
+          textAnchor="middle"
+          className="text-2xl select-none pointer-events-none"
+        >
+          {member.avatar}
+        </text>
+
+        {/* Name */}
+        <text
+          x={member.x}
+          y={member.y + 55}
+          textAnchor="middle"
+          className="text-sm font-medium fill-gray-700 select-none pointer-events-none"
+        >
+          {member.name}
+        </text>
+      </g>
+    ))}
+  </svg>
+</CardContent>
+
             </Card>
           </div>
 
@@ -350,50 +371,6 @@ export function TrustGraph() {
               </Card>
             )}
 
-            {/* AI Insights */}
-            <Card className="famwell-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Info className="w-5 h-5 text-blue-600" />
-                  AI Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-start gap-2">
-                    <TrendingUp className="w-4 h-4 text-green-600 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-green-800">Strong Sibling Bond</p>
-                      <p className="text-xs text-green-600">
-                        Emma and Jake's connection has strengthened by 15% this week
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <div className="flex items-start gap-2">
-                    <TrendingDown className="w-4 h-4 text-yellow-600 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-yellow-800">Attention Needed</p>
-                      <p className="text-xs text-yellow-600">
-                        David and Emma haven't had meaningful interaction in 4 hours
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-start gap-2">
-                    <Users className="w-4 h-4 text-blue-600 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-blue-800">Family Harmony</p>
-                      <p className="text-xs text-blue-600">Overall family trust score is above average</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>

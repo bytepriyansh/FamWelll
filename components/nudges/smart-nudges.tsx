@@ -144,9 +144,7 @@ export function SmartNudges() {
                   <Sparkles className="w-6 h-6 text-purple-600" />
                   Smart Nudge Center
                 </CardTitle>
-                <CardDescription className="text-base">
-                  AI-powered suggestions to strengthen family connections
-                </CardDescription>
+            
               </div>
               <Badge className="bg-purple-100 text-purple-800">
                 {nudges.filter((n) => !sentNudges.includes(n.id)).length} Active Nudges
@@ -261,12 +259,7 @@ export function SmartNudges() {
                       </div>
                     )}
 
-                    {/* Reason */}
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-xs text-gray-500">
-                        <strong>AI Reasoning:</strong> {nudge.reason}
-                      </p>
-                    </div>
+                  
                   </CardContent>
                 </Card>
               )
